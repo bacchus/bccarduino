@@ -1,0 +1,34 @@
+Technical specifications
+
+- Operating voltage: 1.1 ... 3.3 V
+- Power consumption: max. 85 uA
+- Reception frequency: 77.5 KHz
+- Platinum Dimensions (without antenna) LxWxH: 25x10,5x1,3 mm
+- antenna ground: LxØ: 60x10mm
+- Delivery:
+- 1 piece
+    - DCF receiver module with antenna
+    - instructions in German, datasheet Arduino code (via email) after purchase
+- Connections:
+    - Ground = Pin G
+    - Operating voltage = V Pin
+    - Data = T Pin
+    - Power on / off = Pin P1
+- Important NOTE:
+    - the PIN P1 is an on / off switch, which must be set to logical LOW.
+
+
+parameter                       unit    Min  Typ  Max
+
+operating voltage               V       1,2  3    3,3
+current consumption             µA           <90  120
+receiving frequency             KHz     40   77,5 100
+frequency tolerance (antenna)   Hz      -300      300
+sensitivity                     µV/m    80
+working temperature             C       -40       85
+storage temperature             C       -55       85
+
+
+
+
+
