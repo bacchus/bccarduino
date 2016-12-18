@@ -1,0 +1,12 @@
+<button onclick="fn()">Try it</button>
+<p>(pin  7): <span id="in1">...</span></p>
+<script>
+function fn() {
+alert("test");
+var req = new XMLHttpRequest1()
+req.onreadystatechange = function() {
+document.getElementById("in1").innerHTML =
+"bbb";}
+req.open("GET", "ajax_inputs", true);
+req.send(null);}
+</script>

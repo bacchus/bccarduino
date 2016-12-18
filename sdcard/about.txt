@@ -1,0 +1,32 @@
+ReadWrite from SD.h
+
+if (!SD.begin(4)) {
+    Serial.println("initialization failed!");
+    return;
+}
+Serial.println("initialization done.");
+
+
+boolean test;
+test = SD.begin(4);
+if (test) {
+    Serial.println("initialization done.");
+}else{
+    Serial.println("initialization failed!");
+    return;
+}
+
+MOSI - pin 11
+MISO - pin 12.
+
+CLK -  pin 13
+CS -   pin 4
+
+5v - 5v
+3v3 - 3v3
+
+void setup() {
+    pinMode(4,OUTPUT);
+}
+
+

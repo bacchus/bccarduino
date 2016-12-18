@@ -1,0 +1,26 @@
+ENC28J60 Ethernet
+SPI
+
+Характеристики:
+
+чип ENC28J60 Ethernet, корпус SOP28
+SPI интерфейс
+1x10 разъем позволяет легко подключиться к управляющему устройству (Ардуино или другому аналогичному микроконтроллеру)
+встроенный разъем RJ45
+светодиод на питании
+питание: +3.3В
+рабочая частота 25МГц
+размеры платы 55x36 мм
+Для работы с библиотекой (см. ссылку ниже), нужно подключить шилд следующим образом:
+
+
+CS - pin 10
+SI - pin 11
+SO - pin 12
+SCK - pin 13
+VCC - 3v3
+GND - GND
+
+datasheet: https://arduino-ua.com/docs/ENC28J60.pdf
+forum: http://forum.arduino.ua/viewtopic.php?id=350
+https://arduino-ua.com/docs/TCPIPstack.zip

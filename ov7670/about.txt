@@ -1,0 +1,41 @@
+OV7670
+
+setup to registers by 
+Serial Camera Control Bus (SCCB)
+analog I2C
+SIO_C (system clock) 
+SIO_D (data transfer)
+arduiono has integrated I2C with 3v3 on
+A4 (SDA)
+A5 (SCL)
+you need pull-up resistors (10K to 3v3)
+
+XCLK (system clock) - main clock
+need divider (5K: 1 paral, 1 posled - to gnd)
+
+working freq: 24 MHz
+we give it can get from arduino max: 16Mhz
+by (PWM) we give 8Mhz
+in camera - Freq Multiplier (PLL) x3
+
+HREF (horizontal/line sync) - 14.4 KHz (30 fps * 480 lines)
+VSYNC (vertical/frame sync) - 30 Hz
+PCLK (pixel/data sync) - 24 MHz syncs data output D0-D7
+
+RESET - resets when 0
+PWDN - 1-on, 0-off
+
+
+30 fps
+
+VGA     640x480
+QVGA    320х240
+CIF     352х240
+QCIF    176x144
+up to    40x30
+
+YCbCr
+RGB: RGB565, RGB555, RGB444
+
+
+

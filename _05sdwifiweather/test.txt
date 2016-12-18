@@ -1,0 +1,31 @@
+sendPage("<!DOCTYPE html>");
+sendPage("<html>");
+sendPage("<head>");
+sendPage("<title>Arduino Web Page ajax + xml</title>");
+sendPage("</head>");
+sendPage("<body>");
+sendPage("<h1>Arduino inputs ajax + xml</h1>");
+sendPage("<p>(pin  7): <span id=\"i1\">...</span></p>");
+
+sendPage("<button onclick=\"getArduinoInputs()\">Try it</button>");
+
+sendPage("<script>");
+sendPage("function getArduinoInputs() {");
+sendPage("alert(\"test\");");
+sendPage("nocache = \"&nocache=\" + Math.random()*1000000;");
+sendPage("var req = new XMLHttpRequest();");
+sendPage("req.onreadystatechange = function() {");
+sendPage("if (this.readyState == 4) {");
+sendPage("if (this.status == 200) {");
+sendPage("if (this.responseText != null) {");
+sendPage("document.getElementById(\"i1\").innerHTML =");
+sendPage("this.responseXML.getElementsByTagName('b1')[0].childNodes[0].nodeValue;");
+sendPage("}}}}");
+sendPage("req.open(\"GET\", \"ajax_inputs\" + nocache, true);");
+sendPage("req.send(null);");
+sendPage("setTimeout(\"getArduinoInputs()\", 30000);");
+sendPage("}");
+sendPage("</script>");
+
+sendPage("</body>");
+sendPage("</html>");

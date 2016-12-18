@@ -1,0 +1,348 @@
+ESP8266
+
+void setup() {
+    Serial.begin(9600);
+    Serial.setTimeout(5000);
+    ESPSerial.begin(115200);
+}
+
+void loop() {
+    if ( ESPSerial.available() )
+        Serial.write( ESPSerial.read() );
+    if ( Serial.available() )
+        ESPSerial.write( Serial.read() );
+}
+
+wiring:
+petestechprojects.wordpress.com/tag/esp8266/page/3/
+arduino-er.blogspot.com/2015/04/arduino-due-esp8266-to-join-ap.html
+http://benlo.com/esp8266/index.html#LuaLoader
+
+CH_PD to Vcc through 10K
+I up to 250mA
+to 5V from arduino 1.8K to gnd 3.3K + stabilizer 3.3V 
+SoftwareSerial
+
+Версия ПО модуля:
+
+version:0.25.0.0(Jun  5 2015 16:27:16)
+SDK version:1.1.1
+Ai-Thinker Technology Co. Ltd.
+Jun 23 2015 23:23:50
+Характеристики:
+
+поддержка WiFi протоколов 802.11 b/g/n
+Wi-Fi Direct (P2P), soft-AP
+встроенный стек TCP/IP
+встроенный TR переключатель, balun, LNA, усилитель мощности и соответствие сети
+встроенный PLL, регуляторы, и система управления питанием
+выходная мощность +20.5 дБм в режиме 802.11b
+поддержка диверсити антенн
+ток утечки в выключенном состоянии до 10 мкА
+SDIO 2.0, SPI, UART
+STBC, 1x1 MIMO, 2x1 MIMO
+A-MPDU & A-MSDU aggregation & 0.4μs guard interval
+пробуждение и посыл пакетов за время до 22 мс
+потребление в режиме Standby до 1.0 мВт (DTIM3)
+размеры: 24.5х14 мм
+Выводы:
+
+Vcc - питание, +3,3В (максимально 3,6В)
+GND - общий
+TXD - передача данных (уровень 3,3В)
+RXD - приём данных (уровень 3,3В)
+CH_PD - выключение модуля (низкий уровень активный, для включения модуля следует подать Vcc)
+GPIO0 - вывод общего назначения 0
+GPIO2 - вывод общего назначения 2
+RST - сброс модуля (низкий уровень активный)
+
+ESP8266
+
+|       RX  VCC
+S |     IO0 RST
+S |     IO2 CH_PD
+----    GND TX
+
+ESP8266 -   Arduino    
+RX      -   TX (divider)
+TX      -   RX
+VCC     -   3.3
+GND     -   GND
+CH_PD   -   3.3
+
+//-------------------------------------------------------------------
+set "Both NL&CR" baud: 115200
+
+# err: n't use rtc mem data
+# err: invalid
+
+# check
+AT
+OK
+
+# check version
+AT+GMR
+AT version:0.40.0.0(Aug  8 2015 14:45:58)
+SDK version:1.3.0
+Ai-Thinker Technology Co.,Ltd.
+Build:1.3.0.2 Sep 11 2015 11:48:04
+
+
+AT+GMR
+
+AT version:0.22.b1.0
+SDK version:0.9.6(b1)
+
+
+# enable mode
+# 1 - STA, 2 - AP, 3 - BOTH
+AT+CWMODE=1
+
+# see connections list
+AT+CWLAP
+...
++CWLAP:(4,"bccwifi",-40,"d0:df:9a:bc:e4:52",1,-31)
+
+# SECURITY, SSID, RSSI, BSSID, CHANNEL
+# 0 - OPEN, 1 - WEP, 2 - WPA-PSK
+# , 3 - WPA2-PSK, 4 — MIXED (WPA-WPA2-PSK)
+
+
+# AT+CWJAP="SSID","PASSWORD"
+AT+CWJAP="bccwifi","qazwsxedc"
+WIFI CONNECTED
+WIFI GOT IP
+OK
+
+
+#ubuntu: arp -a
+
+# see ip
+AT+CIFSR
++CIFSR:STAIP,"10.42.0.42"
++CIFSR:STAMAC,"5c:cf:7f:13:b5:f9"
+
+AT+CIPSTART="TCP","10.42.0.1","80"
+
+# disconnect
+AT+CWQAP
+
+
+
+
+
+
+# change mode
+AT+CWMODE=2
+
+# create serv ap
+# AT+CWSAP="SSID","PASSWORD",CHANNEL,SECURITY
+AT+CWSAP="bccesp","habrahabr",10,4
+
+# see ip
+AT+CIFSR
++CIFSR:APIP,"192.168.4.1"
++CIFSR:APMAC,"5e:cf:7f:13:b5:f9"
+
+# list clients: nexus5
+AT+CWLIF
+192.168.4.2,8c:3a:e3:6e:b6:92
+
+#AT+IPR=9600
+#AT+IPR=115200
+
+
+
+# set TCP serv
+# 0 - not data mode (both)
+# 1 - data mode (recv only)
+AT+CIPMODE=0
+
+# 0 - single connection
+# 1 - multiple connection
+AT+CIPMUX=1
+
+# check prev
+AT+CIPMUX?
+
+# start serv: port 8888
+# 0 - to close server
+# 1 - to open server
+AT+CIPSERVER=1,80
+
+# see connections
+AT+CIPSTATUS
+STATUS:5
++CIPSTATUS:0,"TCP","192.168.4.2",49918,1
+
++IPD,0,416:GET / HTTP/1.1
+Host: 192.168.4.1:8888
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+Save-Data: on
+User-Agent: Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5 Build/MOB30P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.81 Mobile Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: en-US,en;q=0.8
+
+
+# to close: AT+CIPCLOSE=<id>
+# no id - close all
+
+# sending
+# singl: AT+CIPSEND=<length>
+# multi: AT+CIPSEND=<id>,<length>
+
+AT+CIPSEND=0,7
+>
+hello
+
+AT+CIPCLOSE=0
+
+# receive
+# singl: +IPD,<len>:<data>
+# multi:  +IPD,<id>,<len>:<data>
+
+# send:
+curl --request POST '192.168.4.1:8888' --data "hi"
+# listen:
+nc 192.168.4.1 8888
+# scan ports
+nc -zv 10.42.0.42 1-100
+
+AT+CIPSTART="UDP","10.42.0.1",80
+CONNECT
+OK
+
+
+
+AT+CIPSEND=0,17
+HTTP/1.1 200 OK
+AT+CIPSEND=0,25
+Content-Type: text/html
+AT+CIPSEND=0,19
+Connection: close
+
+AT+CIPSEND=0,156
+<!DOCTYPE html><html><head><title>Arduino Web Page</title></head><body><h1>Hello from Arduino!</h1><p>A web page from the Arduino server</p></body></html>
+
+
+
+
+
+--> while true; do nc -l 8888 < index.html; done
+GET /index1.html HTTP/1.1
+Host: 127.0.0.1:8888
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/51.0.2704.79 Chrome/51.0.2704.79 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: en-US,en;q=0.8,ru;q=0.6
+
+GET /favicon.ico HTTP/1.1
+Host: 127.0.0.1:8888
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/51.0.2704.79 Chrome/51.0.2704.79 Safari/537.36
+Accept: */*
+Referer: http://127.0.0.1:8888/index1.html
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: en-US,en;q=0.8,ru;q=0.6
+
+
+
+
+
+
+# iptables
+http://10.42.0.42:8888/
+sysctl net.ipv4.ip_forward=1
+iptables -t nat -A PREROUTING -p tcp --dport 9991 -j DNAT --to-destination 10.42.0.42:8888
+sudo iptables -t nat -L
+sudo iptables -t nat -A POSTROUTING -j MASQUERADE
+sudo iptables -t nat -L -v --line-numbers
+sudo iptables -t nat -D POSTROUTING 6
+
+sudo iptables-save > ~/dubhe/download/iptables0-test.rules
+sudo iptables-restore < iptables1.rules 
+
+sudo iptables -L
+sudo iptables -t nat -L
+
+
+# sudo iptables -t nat -L -v
+Chain POSTROUTING (policy ACCEPT 49 packets, 3939 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+   28  5783 MASQUERADE  all  --  any    any     10.42.0.0/24        !10.42.0.0/24
+
+# sudo iptables -L -v
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+  295 90435 ACCEPT     all  --  any    wlp3s0  anywhere             10.42.0.0/24         state RELATED,ESTABLISHED
+  376 70064 ACCEPT     all  --  wlp3s0 any     10.42.0.0/24         anywhere
+    0     0 ACCEPT     all  --  wlp3s0 wlp3s0  anywhere             anywhere
+    0     0 REJECT     all  --  any    wlp3s0  anywhere             anywhere             reject-with icmp-port-unreachable
+    0     0 REJECT     all  --  wlp3s0 any     anywhere             anywhere             reject-with icmp-port-unreachable
+
+
+
+
+
+<button onclick=\"fn()\">Try it</button><p>(pin  7): <span id
+<button onclick=\"fn()\">Try it</button><p>Temperature: 
+<span id=\"d1\">...</span> *c</p><p>Humidity: 
+<span id=\"d2\">...</span></p><script>function fn() {
+
+
+
+
+
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/51.0.2704.79 Chrome/51.0.2704.79 Safari/537.36
+User-Agent: Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5 Build/MOB30Y) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36
+
+
+
+
+
+
+
+
+# normal request local chrome
++IPD,0,427:GET / HTTP/1.1
+Host: 10.42.0.42
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/51.0.2704.79 Chrome/51.0.2704.79 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: en-US,en;q=0.8,ru;q=0.6
+
+
+
+
+# forwarded remote android
++IPD,0,528:GET / HTTP/1.1
+Host: 178.150.216.41:9991
+Forwarded: for=37.73.194.34
+Scheme: http
+Via: 1.1 Chrome-Compression-Proxy
+X-Forwarded-For: 37.73.194.34
+
++IPD,1,419:GET / HTTP/1.1
+Host: 178.150.216.41:9991
+
+
+
+
+# forwarded local android
++IPD,0,420:GET / HTTP/1.1
+Host: 178.150.216.136:9991
+
+
+# normal request local android
++IPD,0,410:GET / HTTP/1.1
+Host: 10.42.0.42
+
+
+
