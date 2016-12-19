@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Arduino SD Card Web Page</title>
+        <script>
+            var btn_count = 0;
+            var btn_count_0 = 0;
+            var num_classes = 0;
+            function ButtonCount()
+            {
+                btn_count++;
+                document.getElementsByClassName("btn_clicks")[0].innerHTML = btn_count;
+                document.getElementsByClassName("btn_clicks")[1].innerHTML = btn_count_0;
+                btn_count_0++;
+                // get the number of btn_clicks classes on the page
+                document.getElementById("btn_classes").innerHTML =
+                                    document.getElementsByClassName("btn_clicks").length;
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Arduino SD Card Page with JavaScript</h1>
+        <button type="button" onclick="ButtonCount()">Click to Count</button>
+        <p>The button has been clicked <span class="btn_clicks">0</span> times.</p>
+        <p>Or counting from 0 clicked <span class="btn_clicks">?</span> times.</p>
+        <p>Number of "btn_clicks" classes on page: <span id="btn_classes"></span></p>
+    </body>
+</html>

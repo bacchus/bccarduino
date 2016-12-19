@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Arduino Web Page</title>
+  <script>
+    function getSwitchState() {
+      nocache = "&nocache=" + Math.random()*1000000;
+      var req = new XMLHttpRequest();
+      req.onreadystatechange = function() {
+        if (this.readyState == 4) {
+          if (this.status == 200) {
+            if (this.responseText != null) {
+              document.getElementById("switch_txt").innerHTML = this.responseText;
+            }
+          }
+        }
+      }
+      req.open("GET", "ajax_switch" + nocache, true);
+      req.send(null);
+    }
+  </script>
+</head>
+<body>
+  <h1>Arduino ajax switch status</h1>
+  <p id="switch_txt">Switch state not requested ...</p>
+  <button type="button" onclick="getSwitchState()">Get switch state</button>
+</body>
+</html>

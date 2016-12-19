@@ -1,0 +1,7 @@
+<?xml version = "1.0" ?>
+<inputs>
+  <button1>ON</button1>
+  <button2>OFF</button2>
+  <analog1>256</analog1>
+</inputs>
+

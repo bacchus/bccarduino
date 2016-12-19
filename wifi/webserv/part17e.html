@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Arduino SD Card Web Page</title>
+        <script>
+            var btn_count = 0;
+            function ButtonCount()
+            {
+                btn_count++;
+                document.getElementById("btn_clicks").innerHTML = btn_count;
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Arduino SD Card Page with JavaScript</h1>
+        <button type="button" onclick="ButtonCount()">Click to Count</button>
+        <p>The button has been clicked <span id="btn_clicks">0</span> times.</p>
+    </body>
+</html>
