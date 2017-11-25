@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html><head><title>Arduino Web Page ajax + xml</title>
+<script>function getArduinoInputs() {
+nocache = "&nocache=" + Math.random()*1000000;
+var req = new XMLHttpRequest();
+req.onreadystatechange = function() {
+if (this.readyState == 4) { if (this.status == 200) {
+if (this.responseText != null) {
+document.getElementById("i1").innerHTML = this.responseXML
+.getElementsByTagName('b1')[0].childNodes[0].nodeValue;
+document.getElementById("i2").innerHTML = this.responseXML
+.getElementsByTagName('b2')[0].childNodes[0].nodeValue;
+document.getElementById("i3").innerHTML = this.responseXML
+.getElementsByTagName('a1')[0].childNodes[0].nodeValue;}}}}
+req.open("GET", "ajax_inputs" + nocache, true);
+req.send(null); setTimeout("getArduinoInputs()", 60000); }
+</script></head><body onload="getArduinoInputs()">
+<h1>Arduino inputs ajax + xml</h1>
+<p>Button 1 (pin  7): <span id="i1">...</span></p>
+<p>Button 2 (pin  8): <span id="i2">...</span></p>
+<p>Analog   (pin A2): <span id="i3">...</span></p>
+</body></html>
